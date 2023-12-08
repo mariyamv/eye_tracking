@@ -1,4 +1,7 @@
+import json
 import sys
+import os
+
 import tobii_research as tr
 import pygame
 import numpy as np
@@ -85,8 +88,7 @@ def main():
     while running:
         for event in pygame.event.get():
             # End the Game
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                import os
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
                 os.makedirs(output_path_dir, exist_ok=True)
                 pygame.image.save(screen, f'{output_path_dir}/drawing_with_image.png')
                 pygame.display.flip()
@@ -108,9 +110,15 @@ def main():
         draw_dots()
         pygame.display.flip()
 
+
+
     my_eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, gaze_data_callback)
     save_gaze_data_to_csv(f'{output_path_dir}/raw_gaze_data.csv')
-    do_analysis(f'{output_path_dir}/raw_gaze_data.csv', image_path)
+    analyzed_data = do_analysis(f'{output_path_dir}/raw_gaze_data.csv', image_path)
+    analyzed_data = json.dumps(analyzed_data, indent=4)
+    with open(f'{output_path_dir}/analyzed_data.json', 'w') as f:
+        f.write(analyzed_data)
+
     pygame.quit()
 
 
