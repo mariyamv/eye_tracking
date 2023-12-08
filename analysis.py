@@ -15,6 +15,7 @@ import math
 def calculate_saccade_amplitude(x1, y1, x2, y2):
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
+
 def do_analysis(gaze_data_path, image_path):
 
     data = pd.read_csv(gaze_data_path)
@@ -30,23 +31,10 @@ def do_analysis(gaze_data_path, image_path):
     mean_fixation_duration = np.mean([fix[2] for fix in fixations])
     sd_fixation_duration = np.std([fix[2] for fix in fixations])
 
-    amplitudes = [calculate_saccade_amplitude(x[3], x[4], x[5], x[6]) for x in saccades]
-
     num_saccades = len(saccades)
     mean_saccade_length = np.mean([sacc[2] for sacc in saccades])
     sd_saccade_length = np.std([sacc[2] for sacc in saccades])
 
-    # k coefficient for saccades
-
-    # display_size = (1440, 900)
-    # fixation_output = f'fixation_{image_path}'
-    # gp.draw_fixations(fixations,
-    #                   display_size,
-    #                   imagefile=image_path,
-    #                   durationsize=True,
-    #                   durationcolour=False,
-    #                   alpha=0.5,
-    #                   savefilename=fixation_output)
 
     return {
         'num_fixations': num_fixations,
