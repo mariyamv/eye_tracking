@@ -70,13 +70,13 @@ def draw_dots():
 
 def main():
     if len(sys.argv) < 3:
-        file_name = "./sample.jpeg"
-        output_name = time.strftime("%Y%m%d-%H%M%S")
+        image_path = "./sample.jpeg"
+        output_path_dir = time.strftime("%Y%m%d-%H%M%S")
     else:
-        file_name = sys.argv[1]
-        output_name = sys.argv[2]
+        image_path = sys.argv[1]
+        output_path_dir = sys.argv[2]
 
-    background_image = load_and_scale_background(file_name)
+    background_image = load_and_scale_background(image_path)
     found_eyetrackers = tr.find_all_eyetrackers()
     my_eyetracker = found_eyetrackers[0]
     my_eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
@@ -87,12 +87,12 @@ def main():
             # End the Game
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 import os
-                os.makedirs(output_name, exist_ok=True)
-                pygame.image.save(screen, f'{output_name}/drawing_with_image.png')
+                os.makedirs(output_path_dir, exist_ok=True)
+                pygame.image.save(screen, f'{output_path_dir}/drawing_with_image.png')
                 pygame.display.flip()
                 screen.fill(WHITE)
                 draw_dots()
-                pygame.image.save(screen, f'{output_name}/drawing.png')
+                pygame.image.save(screen, f'{output_path_dir}/drawing.png')
                 running = False
                 break
 
@@ -109,9 +109,8 @@ def main():
         pygame.display.flip()
 
     my_eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, gaze_data_callback)
-    save_gaze_data_to_csv(f'{output_name}/raw_gaze_data.csv')
-    do_analysis(f'{output_name}/raw_gaze_data.csv')
-
+    save_gaze_data_to_csv(f'{output_path_dir}/raw_gaze_data.csv')
+    do_analysis(f'{output_path_dir}/raw_gaze_data.csv', image_path)
     pygame.quit()
 
 
