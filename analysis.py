@@ -22,7 +22,7 @@ def do_analysis(gaze_data_path, image_path):
 
     x = np.array((data['Right_X'] + data['Left_X']) / 2) * 1440
     y = np.array((data['Right_Y'] + data['Left_Y']) / 2) * 900
-    timestamps = np.array(data['Timestamp'])
+    timestamps = np.array(data['Timestamp']) * 1000
 
     _, fixations = detectors.fixation_detection(x, y, timestamps)
     _, saccades = detectors.saccade_detection(x, y, timestamps)
@@ -46,4 +46,4 @@ def do_analysis(gaze_data_path, image_path):
 
 
 if __name__ == '__main__':
-    do_analysis('./raw_gaze_data.csv', './sample.jpeg')
+    do_analysis('20231207-202530/raw_gaze_data.csv', './sample.jpeg')
