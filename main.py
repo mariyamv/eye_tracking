@@ -72,14 +72,19 @@ def draw_dots():
 
 
 def main():
-    if len(sys.argv) < 3:
-        image_path = "./sample.jpeg"
-        output_path_dir = time.strftime("%Y%m%d-%H%M%S")
-    else:
-        image_path = sys.argv[1]
-        output_path_dir = sys.argv[2]
+    output_path_dir = time.strftime("%Y%m%d-%H%M%S")
 
-    background_image = load_and_scale_background(image_path)
+    if len(sys.argv) < 2:
+        image_path = "./sample.jpeg"
+        background_image = load_and_scale_background(image_path)
+    else:
+        if sys.argv[1] == '-b':
+            image_path = None
+            background_image = None
+        else:
+            image_path = sys.argv[1]
+            background_image = load_and_scale_background(image_path)
+
     found_eyetrackers = tr.find_all_eyetrackers()
     my_eyetracker = found_eyetrackers[0]
     my_eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
@@ -102,9 +107,10 @@ def main():
         screen.fill(WHITE)
 
         # Draw the centered background image
-        bg_x = (WIDTH - background_image.get_width()) // 2
-        bg_y = (HEIGHT - background_image.get_height()) // 2
-        screen.blit(background_image, (bg_x, bg_y))
+        if background_image is not None:
+            bg_x = (WIDTH - background_image.get_width()) // 2
+            bg_y = (HEIGHT - background_image.get_height()) // 2
+            screen.blit(background_image, (bg_x, bg_y))
 
         # Draw gaze points
         draw_dots()
