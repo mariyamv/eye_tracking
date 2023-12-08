@@ -11,7 +11,7 @@ from analysis import do_analysis
 
 pygame.init()
 
-WIDTH, HEIGHT = 1440, 900
+WIDTH, HEIGHT = 3024 //2, 1964 //2
 WHITE = (255, 255, 255)
 
 # Initialize Pygame window
